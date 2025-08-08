@@ -253,7 +253,7 @@ void CTFWeaponBaseMelee::SecondaryAttack()
 // Purpose: 
 // Input  : *pPlayer - 
 //-----------------------------------------------------------------------------
-void CTFWeaponBaseMelee::PlaySwingSound( void )
+void CTFWeaponBaseMelee::PlaySwingSound( void ) //**//
 {
 	if ( IsCurrentAttackACrit() )
 	{

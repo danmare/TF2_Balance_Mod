@@ -284,7 +284,7 @@ void CTFWeaponInvis::SetFeignDeathState( bool bEnabled )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Set the correct cloak consume & regen rates for this item.
+// Purpose: Set the correct cloak consume & regen rates for this item. //**// 
 //-----------------------------------------------------------------------------
 void CTFWeaponInvis::SetCloakRates( void )
 {

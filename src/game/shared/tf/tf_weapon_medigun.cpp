@@ -1534,7 +1534,7 @@ void CWeaponMedigun::ItemPostFrame( void )
 
 	// Try to start healing
 	m_bAttacking = false;
-	if ( pOwner->GetMedigunAutoHeal() )
+	if ( pOwner->GetMedigunAutoHeal() ) //**//
 	{
 		if ( pOwner->m_nButtons & IN_ATTACK )
 		{
@@ -1711,7 +1711,7 @@ void CWeaponMedigun::RemoveHealingTarget( bool bStopHealingSelf )
 	m_hHealingTarget.Set( NULL );
 
 #ifdef GAME_DLL
-	// See if we have The QuickFix, which adjusts our move speed based on heal target
+	// See if we have The QuickFix, which adjusts our move speed based on heal target //**//
 	pOwner->TeamFortress_SetSpeed();
 
 #endif

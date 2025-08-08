@@ -330,13 +330,13 @@ void CTFKnife::DisguiseOnKill()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose:
+// Purpose: 
 //-----------------------------------------------------------------------------
-bool CTFKnife::ShouldDisguiseOnBackstab()
+bool CTFKnife::ShouldDisguiseOnBackstab()  //**// 
 {
 	int iDisguiseAsVictim = 0;
 	CALL_ATTRIB_HOOK_INT( iDisguiseAsVictim, set_disguise_on_backstab );
-	if ( iDisguiseAsVictim == 1 )
+	if ( iDisguiseAsVictim == 1 ) 
 		return true;
 	else
 		return false;

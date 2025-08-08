@@ -10,7 +10,7 @@
 #include "tf_nav_area.h"
 #include "tf_obj_teleporter.h"
 
-#define TF_PLAYER_JUMP_HEIGHT	45.0f			// non crouch-jumping
+#define TF_PLAYER_JUMP_HEIGHT	45.0f			// non crouch-jumping  //**//
 
 class CBaseObject;
 class CObjectTeleporter;

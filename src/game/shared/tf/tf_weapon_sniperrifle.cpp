@@ -37,6 +37,7 @@ void ToolFramework_RecordMaterialParams( IMaterial *pMaterial );
 #define TF_WEAPON_SNIPERRIFLE_DAMAGE_MAX		150
 #define TF_WEAPON_SNIPERRIFLE_RELOAD_TIME		1.5f
 #define TF_WEAPON_SNIPERRIFLE_ZOOM_TIME			0.3f
+#define TF_WEAPON_SNIPERRIFLE_NEW_MAX_AMMO		12	//??//
 
 #define TF_WEAPON_SNIPERRIFLE_NO_CRIT_AFTER_ZOOM_TIME	0.2f
 
@@ -143,7 +144,7 @@ CTFSniperRifle::CTFSniperRifle()
 #else
 	m_bPlayedBell = false;
 #endif
-
+	
 	m_bCurrentShotIsHeadshot = false;
 	m_flChargedDamage = 0.0f;
 	m_flChargePerSec = TF_WEAPON_SNIPERRIFLE_CHARGE_PER_SEC;
@@ -160,6 +161,20 @@ CTFSniperRifle::~CTFSniperRifle()
 #ifdef GAME_DLL
 	DestroySniperDot();
 #endif
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:	Sets a Sniper Rifle's base ammo to NEW_MAX_AMMO		//??//
+//-----------------------------------------------------------------------------
+int CTFSniperRifle::ChangeAmmo( void )
+{
+	float flClip = BaseClass::GetMaxClip1();
+	flClip = TF_WEAPON_SNIPERRIFLE_NEW_MAX_AMMO;
+	if (flClip >= 0)
+	{
+		CALL_ATTRIB_HOOK_INT(flClip, mult_clipsize);
+	}
+	return flClip;
 }
 
 //-----------------------------------------------------------------------------
@@ -753,7 +768,7 @@ void CTFSniperRifle::SetInternalUnzoomTime( float flUnzoomTime )
 }
   
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:   //**//
 //-----------------------------------------------------------------------------
 ETFDmgCustom CTFSniperRifle::GetPenetrateType() const
 {

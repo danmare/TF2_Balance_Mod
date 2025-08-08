@@ -537,6 +537,8 @@ private:
 
 	void GetHorriblyHackedRailgunPosition( const Vector& vStart, Vector *out_pvStartPos );
 	void MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *pWeapon, const Vector& vStartPos, const Vector& vEndPos );
+	int AlterSniperAmmo(CTFWeaponBase* pWeapon, int iAmmoIndex, int iClassIndex /*= -1*/); //??//
+	
 
 	bool				m_bWasTaunting;
 	bool				m_bTauntInterpolating;

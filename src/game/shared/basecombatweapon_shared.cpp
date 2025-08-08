@@ -1962,7 +1962,7 @@ void CBaseCombatWeapon::WeaponSound( WeaponSound_t sound_type, float soundtime /
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Stop a sound played by this weapon.
+// Purpose: Stop a sound played by this weapon.	//**//
 //-----------------------------------------------------------------------------
 void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 {
@@ -1973,7 +1973,7 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 	const char *shootsound = GetShootSound( sound_type );
 	if ( !shootsound || !shootsound[0] )
 		return;
-	
+
 	CSoundParameters params;
 	if ( !GetParametersForSound( shootsound, params, NULL ) )
 		return;
@@ -1984,6 +1984,18 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 		if ( GetOwner() )
 		{
 			StopSound( GetOwner()->entindex(), shootsound );
+		}
+	}
+	
+	// Are you using the Your Eternal Reward? //??//
+	CTFPlayer CanDisguise_OnKill();
+
+	// Don't play sound in kill if using Your Eternal Reward //??//
+	if  (CanDisguise_OnKill)
+	{
+		if (GetOwner())
+		{
+			StopSound(GetOwner()->entindex(), shootsound);
 		}
 	}
 	else

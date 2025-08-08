@@ -2002,7 +2002,7 @@ void CTFGameRulesProxy::FireGameEvent( IGameEvent *event )
 }
 
 // (We clamp ammo ourselves elsewhere).
-ConVar ammo_max( "ammo_max", "5000", FCVAR_REPLICATED );
+ConVar ammo_max( "ammo_max", "5000", FCVAR_REPLICATED ); //**//
 
 #ifndef CLIENT_DLL
 ConVar sk_plr_dmg_grenade( "sk_plr_dmg_grenade","0");		// Very lame that the base code needs this defined

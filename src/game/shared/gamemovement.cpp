@@ -2544,12 +2544,13 @@ void CGameMovement::FullLadderMove()
 	{
 		mv->m_nOldButtons &= ~IN_JUMP;
 	}
-	
 	// Perform the move accounting for any base velocity.
 	VectorAdd (mv->m_vecVelocity, player->GetBaseVelocity(), mv->m_vecVelocity);
 	TryPlayerMove();
 	VectorSubtract (mv->m_vecVelocity, player->GetBaseVelocity(), mv->m_vecVelocity);
 }
+
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 

@@ -177,7 +177,7 @@ ConVar tf_demoman_charge_drain_time( "tf_demoman_charge_drain_time", "1.5", FCVA
 
 // STAGING_SPY
 ConVar tf_feign_death_duration( "tf_feign_death_duration", "3.0", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Time that feign death buffs last." );
-ConVar tf_feign_death_speed_duration( "tf_feign_death_speed_duration", "3.0", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Time that feign death speed boost last." );
+//ConVar tf_feign_death_speed_duration( "tf_feign_death_speed_duration", "3.0", FCVAR_REPLICATED | FCVAR_DEVELOPMENTONLY | FCVAR_CHEAT, "Time that feign death speed boost last." ); //OO//
 
 ConVar tf_allow_taunt_switch( "tf_allow_taunt_switch", "0", FCVAR_REPLICATED, "0 - players are not allowed to switch weapons while taunting, 1 - players can switch weapons at the start of a taunt (old bug behavior), 2 - players can switch weapons at any time during a taunt." );
 
@@ -7149,12 +7149,12 @@ void CTFPlayerShared::OnAddFeignDeath( void )
 
 	// STAGING_SPY
 	// Add a speed boost while feigned and afterburn immunity while running away
-	AddCond( TF_COND_SPEED_BOOST, tf_feign_death_speed_duration.GetFloat() );
-	AddCond( TF_COND_AFTERBURN_IMMUNE, tf_feign_death_speed_duration.GetFloat() );
+	// AddCond( TF_COND_SPEED_BOOST, tf_feign_death_speed_duration.GetFloat() ); //OO//
+	// AddCond( TF_COND_AFTERBURN_IMMUNE, tf_feign_death_speed_duration.GetFloat() ); //OO//
 
 	SetFeignDeathReady( false );
 
-	m_flFeignDeathEnd = gpGlobals->curtime + tf_feign_death_speed_duration.GetFloat();
+	m_flFeignDeathEnd = gpGlobals->curtime /* + tf_feign_death_speed_duration.GetFloat()*/;
 }
 
 //-----------------------------------------------------------------------------
@@ -8071,6 +8071,14 @@ bool CTFPlayerShared::IsStealthed( void ) const
 {
 
 	return ( InCond( TF_COND_STEALTHED ) || InCond( TF_COND_STEALTHED_USER_BUFF ) || InCond( TF_COND_STEALTHED_USER_BUFF_FADING ) );
+}
+
+//-----------------------------------------------------------------------------
+// Purpose:			//??//
+//-----------------------------------------------------------------------------
+bool CTFPlayerShared::IsSpySprinting(void) const
+{
+	return (InCond(TF_COND_SPY_SPRINT));
 }
 
 //-----------------------------------------------------------------------------
@@ -9993,7 +10001,6 @@ bool CTargetOnlyFilter::ShouldHitEntity( IHandleEntity *pHandleEntity, int conte
 		return CTraceFilterSimple::ShouldHitEntity( pHandleEntity, contentsMask );
 }
 
-
 //-----------------------------------------------------------------------------
 // Purpose:
 //   Input: info
@@ -10009,24 +10016,33 @@ void CTFPlayer::MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *
 	Assert( pWeapon );
 
 	int iShouldFireTracer = 0;
-	CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iShouldFireTracer, sniper_fires_tracer );
+	// Graps the type of weapon player is using if it is a Sniper Rifle
+	CTFSniperRifle* pRifle = dynamic_cast<CTFSniperRifle*>(pWeapon); //OO//
 
+	CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iShouldFireTracer, sniper_fires_tracer );
+	
+	// Checks if the weapon is a Sniper Rifle that is not the Sydney Sleeper. Sets iShouldFireTracer to 1 if true.
+	if (WeaponID_IsSniperRifle(pWeapon->GetWeaponID()) && !(pRifle->GetRifleType() == RIFLE_JARATE)) //OO//
+	{
+		iShouldFireTracer = 1;
+	}
+	// If iShouldFireTracer is 0, hides tracer effect
 	if ( !iShouldFireTracer )
 	{
 		CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iShouldFireTracer, sniper_fires_tracer_HIDDEN );
 	}
 
 	// Check for heatmaker
-	if ( !iShouldFireTracer )
+	/*if (!iShouldFireTracer) //OO//
 	{
 		iShouldFireTracer = m_Shared.InCond( TF_COND_SNIPERCHARGE_RAGE_BUFF ) && pWeapon && WeaponID_IsSniperRifle( pWeapon->GetWeaponID() );
-	}
-
+	}*/
+	// If iShouldFireTracer is 1, sets tracer effect. If the weapon is a Sniper Rifle and is the Classic, replaces tracer effect with Classic specific effect.
 	if ( iShouldFireTracer )
 	{
 		const char *pParticleSystemName = pWeapon->GetTeamNumber() == TF_TEAM_BLUE ? "dxhr_sniper_rail_blue" : "dxhr_sniper_rail_red";
-		CTFSniperRifle *pRifle = dynamic_cast< CTFSniperRifle* >( pWeapon );
-		if ( pRifle && ( pRifle->GetRifleType() == RIFLE_CLASSIC ) )
+		// CTFSniperRifle *pRifle = dynamic_cast< CTFSniperRifle* >( pWeapon ); //OO//
+		if (pRifle && (pRifle->GetRifleType() == RIFLE_CLASSIC))
 		{
 			pParticleSystemName = "tfc_sniper_distortion_trail";
 		}
@@ -10046,6 +10062,22 @@ void CTFPlayer::MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *
 #endif // GAME_DLL
 	}
 }
+
+//int CTFPlayer::AlterSniperAmmo(CTFWeaponBase* pWeapon, int iAmmoIndex, int iClassIndex /*= -1*/) //??//
+/* {
+	Assert(pWeapon);
+
+	CTFSniperRifle* pRifle = dynamic_cast<CTFSniperRifle*>(pWeapon);
+	int iMax = (iClassIndex == -1) ? m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex] : GetPlayerClassData(iClassIndex)->m_aAmmoMax[iAmmoIndex];
+
+	if (pRifle && iAmmoIndex > 12)
+	{
+		GetPlayerClassData(iClassIndex)->m_aAmmoMax[iAmmoIndex] -= 13;
+	}
+
+	return iAmmoIndex;
+}*/
+
 
 void CTFPlayer::GetHorriblyHackedRailgunPosition( const Vector& vStart, Vector *out_pvStartPos )
 {
@@ -10768,7 +10800,7 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 
 	CScopedFlag<char> flagAvoidReentrancy( m_bIsCalculatingMaximumSpeed );
 
-	// Slow us down if we're disguised as a slower class
+	// Slow us down if we're disguised as a slower class //**//
 	// unless we're cloaked..
 	float maxfbspeed = default_speed;
 
@@ -10779,9 +10811,16 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 		maxfbspeed = 0.0f;
 	}
 	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !m_Shared.IsStealthed() )
-	{
-		float flMaxDisguiseSpeed = GetPlayerClassData( m_Shared.GetDisguiseClass() )->m_flMaxSpeed;
-		maxfbspeed = MIN( flMaxDisguiseSpeed, maxfbspeed );
+	{	
+		if (m_Shared.InCond(TF_COND_SPY_SPRINT)) //??//
+		{
+			return maxfbspeed;
+		}
+		else
+		{ //
+			float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
+			maxfbspeed = MIN(flMaxDisguiseSpeed, maxfbspeed);
+		}
 	}
 
 	if ( !TFGameRules()->IsMannVsMachineMode() || !IsMiniBoss() ) // No aiming slowdown penalties for MiniBoss players in MVM

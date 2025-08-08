@@ -361,6 +361,7 @@ public:
 	bool	IsCritBoosted( void ) const;
 	bool	IsInvulnerable( void ) const;
 	bool	IsStealthed( void ) const;
+	bool	IsSpySprinting(void) const; //??//
 	bool	CanBeDebuffed( void ) const;
 	bool	IsImmuneToPushback( void ) const;
 

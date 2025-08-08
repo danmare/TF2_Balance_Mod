@@ -52,6 +52,7 @@ LINK_ENTITY_TO_CLASS( tf_weapon_drg_pomson, CTFDRGPomson );
 PRECACHE_WEAPON_REGISTER( tf_weapon_drg_pomson );
 
 
+
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------

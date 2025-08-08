@@ -804,7 +804,7 @@ void C_TFRagdoll::CreateTFRagdoll()
 		AddEffects( EF_NOSHADOW );
 	}
 
-	// Play a death anim depending on the custom damage type.
+	// Play a death anim depending on the custom damage type. //**//
 	bool bPlayDeathInAir = false;
 	int iDeathSeq = -1;
 	if ( pPlayer && !m_bGoldRagdoll )
@@ -825,7 +825,11 @@ void C_TFRagdoll::CreateTFRagdoll()
 			// always play backstab animations for the ice ragdoll
 			if ( !m_bIceRagdoll && !tf_always_deathanim.GetBool() && (RandomFloat( 0, 1 ) > 0.25f) )
 			{
-				iDeathSeq = -1;
+				// always play backstab animations for Your Eternal Reward
+				if (pPlayer->CanDisguise_OnKill() && !tf_always_deathanim.GetBool() && (RandomFloat(0, 1) > 0.25f)) //OO//
+				{
+					iDeathSeq = -1;
+				}
 			}
 		}
 	}

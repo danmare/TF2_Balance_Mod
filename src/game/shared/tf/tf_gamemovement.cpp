@@ -108,6 +108,7 @@ public:
 	virtual void ProcessMovement( CBasePlayer *pBasePlayer, CMoveData *pMove );
 	virtual bool CanAccelerate();
 	virtual bool CheckJumpButton();
+	//virtual bool SpyJump(); //??//
 	virtual int CheckStuck( void );
 	virtual bool CheckWater( void );
 	virtual void WaterMove( void );
@@ -135,6 +136,9 @@ public:
 	virtual void PlayerRoughLandingEffects( float fvol );
 
 	virtual void HandleDuckingSpeedCrop( void );
+
+	//CTFPlayerShared m_Shared; //??//
+
 protected:
 
 	virtual void CheckWaterJump( void );
@@ -1172,7 +1176,7 @@ bool CTFGameMovement::CheckJumpButton()
 		float flStartZ = mv->m_vecVelocity[2];
 		mv->m_vecVelocity[2] += tf_grapplinghook_jump_up_speed.GetFloat();
 
-		// Powered up flag carriers get a jump height penalty except Agility
+		// Powered up flag carriers get a jump height penalty except Agility //**//
 		if ( m_pTFPlayer->m_Shared.GetCarryingRuneType() != RUNE_AGILITY && m_pTFPlayer->m_Shared.GetCarryingRuneType() != RUNE_NONE && m_pTFPlayer->HasTheFlag() )
 		{
 			mv->m_vecVelocity[2] *= 0.80f;
@@ -1345,6 +1349,27 @@ bool CTFGameMovement::CheckJumpButton()
 	mv->m_nOldButtons |= IN_JUMP;
 	return true;
 }
+
+/*bool CTFGameMovement::SpyJump() //??//
+{
+	float flStartZ = mv->m_vecVelocity[2];
+	if (m_Shared.IsStealthed())
+	{
+		mv->m_vecVelocity[2] *= 1.15f;
+	}
+
+	if (mv->m_vecVelocity[2] > GetAirSpeedCap())
+		mv->m_vecVelocity[2] = GetAirSpeedCap();
+
+	// Apply gravity.
+	FinishGravity();
+
+	mv->m_outJumpVel.z = mv->m_vecVelocity[2] - flStartZ;
+	mv->m_outStepHeight += 0.15f;
+	mv->m_nOldButtons |= IN_JUMP;
+
+	return true;
+}*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
