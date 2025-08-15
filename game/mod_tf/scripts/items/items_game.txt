@@ -18520,11 +18520,6 @@
 			}
 			"attributes"
 			{
-				"hidden primary max ammo bonus"
-				{
-					"attribute_class"	"mult_maxammo_primary"
-					"value"	"0.5"
-				}
 				"disable fancy class select anim"
 				{
 					"attribute_class"	"disable_fancy_class_select_anim"
@@ -29195,6 +29190,11 @@
 				{
 					"attribute_class"	"mult_sniper_charge_per_sec"
 					"value"	"1.25"
+				}
+				"maxammo primary increased"
+				{
+					"attribute_class"	"mult_maxammo_primary"
+					"value" "2.0"
 				}
 			}
 		}

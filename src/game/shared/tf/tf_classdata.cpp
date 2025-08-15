@@ -245,6 +245,10 @@ bool CTFPlayerClassDataMgr::Init( void )
 		pClassData = &m_aTFPlayerClassData[iClass];
 		Assert( pClassData );
 		pClassData->Parse( s_aPlayerClassFiles[iClass] );
+		if (pClassData = &m_aTFPlayerClassData[TF_CLASS_SNIPER])//OO// //Sets the Sniper's Primary Weapon's maximum ammo to 12
+		{
+			pClassData->m_aAmmoMax[TF_AMMO_PRIMARY] = 12;
+		}
 	}
 
 	return true;
