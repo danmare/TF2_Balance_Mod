@@ -3181,6 +3181,26 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 		}
 	}
 
+	if (IsPlayerClass(TF_CLASS_SPY)) //??//
+	{
+		if (ucmd->buttons & IN_ATTACK3)
+		{
+			if (!m_Shared.InCond(TF_COND_SPY_SPRINT))
+			{
+				DevMsg("Spy Sprint: ATTACK3 held, adding condition\n");
+				m_Shared.AddCond(TF_COND_SPY_SPRINT);
+			}
+		}
+		else
+		{
+			if (m_Shared.InCond(TF_COND_SPY_SPRINT))
+			{
+				DevMsg("Spy Sprint: ATTACK3 released, removing condition\n");
+				m_Shared.RemoveCond(TF_COND_SPY_SPRINT);
+			}
+		}
+	}
+
 	BaseClass::PlayerRunCommand( ucmd, moveHelper );
 
 	// try to play taunt remap on input after updating user command
@@ -23087,4 +23107,10 @@ void CTFPlayer::ScriptEquipWearableViewModel( HSCRIPT hWearableViewModel )
 void CTFPlayer::ScriptStunPlayer( float flTime, float flReductionAmount, int iStunFlags /* = TF_STUN_MOVEMENT */, HSCRIPT hAttacker /* = NULL */ )
 {
 	m_Shared.StunPlayer( flTime, flReductionAmount, iStunFlags, ScriptToEntClass< CTFPlayer >( hAttacker ) );
+}
+
+bool CTFPlayer::IsSpySprinting() const //??//
+{
+	// Check if player is Spy and Special Attack key is pressed
+	return this->IsPlayerClass(TF_CLASS_SPY) && (this->m_nButtons & IN_ATTACK3);
 }

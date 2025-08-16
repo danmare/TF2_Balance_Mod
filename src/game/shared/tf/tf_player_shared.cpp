@@ -8074,14 +8074,6 @@ bool CTFPlayerShared::IsStealthed( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose:			//??//
-//-----------------------------------------------------------------------------
-bool CTFPlayerShared::IsSpySprinting(void) const
-{
-	return (InCond(TF_COND_SPY_SPRINT));
-}
-
-//-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
 bool CTFPlayerShared::CanBeDebuffed( void ) const
@@ -8343,6 +8335,7 @@ void CTFPlayerShared::RemoveDisguise( void )
 
 	AddCond( TF_COND_DISGUISE_WEARINGOFF, 0.5f );
 }
+
 
 #ifdef GAME_DLL
 //-----------------------------------------------------------------------------
@@ -10063,22 +10056,6 @@ void CTFPlayer::MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *
 	}
 }
 
-//int CTFPlayer::AlterSniperAmmo(CTFWeaponBase* pWeapon, int iAmmoIndex, int iClassIndex /*= -1*/) //??//
-/* {
-	Assert(pWeapon);
-
-	CTFSniperRifle* pRifle = dynamic_cast<CTFSniperRifle*>(pWeapon);
-	int iMax = (iClassIndex == -1) ? m_PlayerClass.GetData()->m_aAmmoMax[iAmmoIndex] : GetPlayerClassData(iClassIndex)->m_aAmmoMax[iAmmoIndex];
-
-	if (pRifle && iAmmoIndex > 12)
-	{
-		GetPlayerClassData(iClassIndex)->m_aAmmoMax[iAmmoIndex] -= 13;
-	}
-
-	return iAmmoIndex;
-}*/
-
-
 void CTFPlayer::GetHorriblyHackedRailgunPosition( const Vector& vStart, Vector *out_pvStartPos )
 {
 	Assert( out_pvStartPos != NULL );
@@ -10810,14 +10787,19 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 	{
 		maxfbspeed = 0.0f;
 	}
-	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !m_Shared.IsStealthed() )
+
+	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !m_Shared.IsStealthed())
 	{	
-		if (m_Shared.InCond(TF_COND_SPY_SPRINT)) //??//
+		// If SpySprint is active, ignore disguise slow
+		if (m_Shared.InCond(TF_COND_SPY_SPRINT))
 		{
-			return maxfbspeed;
+			// Do not slow down, keep normal Spy speed
+			DevMsg("Spy Sprint: check successful\n");
+			maxfbspeed = GetPlayerClassData(playerclass)->m_flMaxSpeed;
 		}
 		else
-		{ //
+		{
+			// Slow down to disguise class speed
 			float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
 			maxfbspeed = MIN(flMaxDisguiseSpeed, maxfbspeed);
 		}
@@ -11062,7 +11044,6 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 			break;
 		}
 	}
-
 	return maxfbspeed;
 }
 

@@ -4224,7 +4224,6 @@ void C_TFPlayer::UpdateClientSideAnimation()
 			pWeapon->UpdateAllViewmodelAddons();
 		}
 	}
-
 	BaseClass::UpdateClientSideAnimation();
 }
 

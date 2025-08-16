@@ -361,13 +361,13 @@ public:
 	bool	IsCritBoosted( void ) const;
 	bool	IsInvulnerable( void ) const;
 	bool	IsStealthed( void ) const;
-	bool	IsSpySprinting(void) const; //??//
 	bool	CanBeDebuffed( void ) const;
 	bool	IsImmuneToPushback( void ) const;
 
 	void	Disguise( int nTeam, int nClass, CTFPlayer* pDesiredTarget=NULL, bool bOnKill = false );
 	void	CompleteDisguise( void );
 	void	RemoveDisguise( void );
+	void	SpySprint(void); //??//
 	void	RemoveDisguiseWeapon( void );
 	void	FindDisguiseTarget( void );
 	int		GetDisguiseTeam( void ) const;
