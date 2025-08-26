@@ -10783,26 +10783,17 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 
 	bool bAllowSlowing = m_Shared.InCond( TF_COND_HALLOWEEN_BOMB_HEAD ) ? false : true;
 
+	// If we're disguised as a building, we can't move at all.
 	if ( m_Shared.InCond( TF_COND_DISGUISED_AS_DISPENSER ) && !m_Shared.IsStealthed() )
 	{
 		maxfbspeed = 0.0f;
 	}
 
-	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !m_Shared.IsStealthed())
+	else if ( m_Shared.InCond( TF_COND_DISGUISED ) && !m_Shared.IsStealthed() && !m_Shared.InCond(TF_COND_SPY_SPRINT)) //??//
 	{	
-		// If SpySprint is active, ignore disguise slow
-		if (m_Shared.InCond(TF_COND_SPY_SPRINT))
-		{
-			// Do not slow down, keep normal Spy speed
-			DevMsg("Spy Sprint: check successful\n");
-			maxfbspeed = GetPlayerClassData(playerclass)->m_flMaxSpeed;
-		}
-		else
-		{
-			// Slow down to disguise class speed
-			float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
-			maxfbspeed = MIN(flMaxDisguiseSpeed, maxfbspeed);
-		}
+		// Slow down to disguise class speed
+		float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
+		maxfbspeed = MIN(flMaxDisguiseSpeed, maxfbspeed);
 	}
 
 	if ( !TFGameRules()->IsMannVsMachineMode() || !IsMiniBoss() ) // No aiming slowdown penalties for MiniBoss players in MVM

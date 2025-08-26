@@ -100,7 +100,6 @@ public:
 
 	virtual int	GetWeaponID( void ) const			{ return TF_WEAPON_SNIPERRIFLE; }
 
-	virtual int ChangeAmmo(); //??//
 	virtual void Spawn();
 	virtual void Precache() OVERRIDE;
 	void		 ResetTimers( void );
