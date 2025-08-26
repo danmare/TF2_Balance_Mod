@@ -2234,7 +2234,7 @@ bool CTFPlayer::ProcessSceneEvent( CSceneEventInfo *info, CChoreoScene *scene, C
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Helps handles realtime updates
+// Purpose: Helps handle realtime updates
 //-----------------------------------------------------------------------------
 void CTFPlayer::PreThink()
 {
@@ -2278,65 +2278,24 @@ void CTFPlayer::PreThink()
 		}
 	}
 
-	
-	// Turns on/off experimental Spy Sprint. True is on, false is off.
-		// This is a temporary flag to test the feature, it will be removed in the future.
-	bool check = false;
-	if (check)
+	// Handles Spy Sprint //OO//
+	if (IsPlayerClass(TF_CLASS_SPY))
 	{
-		// Handles Spy Sprint
-		if (IsPlayerClass(TF_CLASS_SPY))
-		{
-			float defaultSpeed = GetPlayerClassData(TF_CLASS_SPY)->m_flMaxSpeed;
+		float defaultSpeed = GetPlayerClassData(TF_CLASS_SPY)->m_flMaxSpeed;
 
-			// Apply sprint condition if the player is holding the sprint button (IN_ATTACK3).
-			bool condActive = (m_nButtons & IN_ATTACK3) != 0;
-			if (condActive)
-			{
-				if (!m_Shared.InCond(TF_COND_SPY_SPRINT))
-				{
-					m_Shared.AddCond(TF_COND_SPY_SPRINT);
-				}
-			}
-			else
-			{
-				if (m_Shared.InCond(TF_COND_SPY_SPRINT))
-				{
-					m_Shared.RemoveCond(TF_COND_SPY_SPRINT);
-				}
-			}
-
-			// Sets Spy's speed to default speed if disguised, not stealthed, and sprinting. Otherwise, sets speed to disguise speed.
-			if (m_Shared.InCond(TF_COND_DISGUISED) && !m_Shared.IsStealthed() && m_Shared.InCond(TF_COND_SPY_SPRINT))
-			{
-				DevMsg("Spy Sprint: check successful\n");
-				SetMaxSpeed(defaultSpeed);
-			}
-
-			else
-			{
-				float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
-				SetMaxSpeed(MIN(flMaxDisguiseSpeed, defaultSpeed));
-			}
-		}
-    }
-
-	// Apply Spy speed fix: disguised, not stealthed, sprint condition
-	if (GetPlayerClass() && GetPlayerClass()->GetClassIndex() == TF_CLASS_SPY)
-	{
+		// Sets Spy's speed to default speed if disguised, not stealthed, and sprinting. Otherwise, sets speed to disguise speed.
 		if (m_Shared.InCond(TF_COND_DISGUISED) && !m_Shared.IsStealthed() && m_Shared.InCond(TF_COND_SPY_SPRINT))
 		{
-			DevMsg("Spy Sprint: check successful\n");
-			float defaultSpeed = GetPlayerClassData(TF_CLASS_SPY)->m_flMaxSpeed;
 			SetMaxSpeed(defaultSpeed);
 		}
-		
-		else
-		{ 
+
+		else if (m_Shared.InCond(TF_COND_DISGUISED) && !m_Shared.IsStealthed() && !m_Shared.InCond(TF_COND_SPY_SPRINT))
+		{
 			float flMaxDisguiseSpeed = GetPlayerClassData(m_Shared.GetDisguiseClass())->m_flMaxSpeed;
-			SetMaxSpeed(flMaxDisguiseSpeed);
+			SetMaxSpeed(MIN(flMaxDisguiseSpeed, defaultSpeed));
 		}
 	}
+
 }
 
 ConVar mp_idledealmethod( "mp_idledealmethod", "1", FCVAR_GAMEDLL, "Deals with Idle Players. 1 = Sends them into Spectator mode then kicks them if they're still idle, 2 = Kicks them out of the game;" );
@@ -3240,13 +3199,13 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 		}
 	}
 
-	if (IsPlayerClass(TF_CLASS_SPY)) //??//
+	// Sets the TF_COND_SPY_SPRINT condition for Spy if Special Attack is held
+	if (IsPlayerClass(TF_CLASS_SPY)) //OO//
 	{
 		if (ucmd->buttons & IN_ATTACK3)
 		{
 			if (!m_Shared.InCond(TF_COND_SPY_SPRINT))
 			{
-				DevMsg("Spy Sprint: ATTACK3 held, adding condition\n");
 				m_Shared.AddCond(TF_COND_SPY_SPRINT);
 			}
 		}
@@ -3254,7 +3213,7 @@ void CTFPlayer::PlayerRunCommand( CUserCmd *ucmd, IMoveHelper *moveHelper )
 		{
 			if (m_Shared.InCond(TF_COND_SPY_SPRINT))
 			{
-				DevMsg("Spy Sprint: ATTACK3 released, removing condition\n");
+
 				m_Shared.RemoveCond(TF_COND_SPY_SPRINT);
 			}
 		}
@@ -23166,10 +23125,4 @@ void CTFPlayer::ScriptEquipWearableViewModel( HSCRIPT hWearableViewModel )
 void CTFPlayer::ScriptStunPlayer( float flTime, float flReductionAmount, int iStunFlags /* = TF_STUN_MOVEMENT */, HSCRIPT hAttacker /* = NULL */ )
 {
 	m_Shared.StunPlayer( flTime, flReductionAmount, iStunFlags, ScriptToEntClass< CTFPlayer >( hAttacker ) );
-}
-
-bool CTFPlayer::IsSpySprinting() const //??//
-{
-	// Check if player is Spy and Special Attack key is pressed
-	return this->IsPlayerClass(TF_CLASS_SPY) && (this->m_nButtons & IN_ATTACK3);
 }

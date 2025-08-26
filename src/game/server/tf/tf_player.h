@@ -865,7 +865,6 @@ public:
 	bool ScriptIsBotOfType(int nType) const { return this->IsBotOfType(nType); }
 
 	void ScriptStunPlayer( float flTime, float flReductionAmount, int iStunFlags = TF_STUN_MOVEMENT, HSCRIPT hAttacker = NULL );
-	bool IsSpySprinting() const; //??//
 
 private:
 	void				GetReadyToTauntWithPartner( void );

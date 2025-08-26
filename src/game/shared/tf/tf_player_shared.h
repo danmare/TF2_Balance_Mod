@@ -367,7 +367,6 @@ public:
 	void	Disguise( int nTeam, int nClass, CTFPlayer* pDesiredTarget=NULL, bool bOnKill = false );
 	void	CompleteDisguise( void );
 	void	RemoveDisguise( void );
-	void	SpySprint(void); //??//
 	void	RemoveDisguiseWeapon( void );
 	void	FindDisguiseTarget( void );
 	int		GetDisguiseTeam( void ) const;

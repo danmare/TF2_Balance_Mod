@@ -137,8 +137,6 @@ public:
 
 	virtual void HandleDuckingSpeedCrop( void );
 
-	//CTFPlayerShared m_Shared; //??//
-
 protected:
 
 	virtual void CheckWaterJump( void );

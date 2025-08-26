@@ -825,7 +825,7 @@ enum ETFCond
 		//
 	// ADD NEW ITEMS HERE TO AVOID BREAKING DEMOS
 	//
-	TF_COND_SPY_SPRINT						 = 131, //??//
+	TF_COND_SPY_SPRINT						 = 131, //OO//
 	// ******** Keep this block last! ********
 	// Keep experimental conditions below and graduate out of it before shipping
 
