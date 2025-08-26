@@ -25,7 +25,7 @@
 #define CTFGasManager C_TFGasManager
 #endif
 
-#define TF_GAS_LIFETIME	5.f
+#define TF_GAS_LIFETIME	5.f  //**//
 #define TF_GAS_POINT_RADIUS	25.f
 #define TF_GAS_AFTERBURN_RATE 10.f
 #define TF_GAS_PROJ_SPEED 2000.f

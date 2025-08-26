@@ -829,7 +829,7 @@ void C_TFRagdoll::CreateTFRagdoll()
 				if (pPlayer->CanDisguise_OnKill() && !tf_always_deathanim.GetBool() && (RandomFloat(0, 1) > 0.25f)) //OO//
 				{
 					iDeathSeq = -1;
-				}
+				} 
 			}
 		}
 	}
@@ -4517,7 +4517,7 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 		{
 			m_flDisguiseEndEffectStartTime = MAX( m_flDisguiseEndEffectStartTime, gpGlobals->curtime );
 
-			// Update visibility of any worn items.
+			// Update visibility of any worn items. //**//
 			UpdateWearables();
 			SetBodygroupsDirty();
 
