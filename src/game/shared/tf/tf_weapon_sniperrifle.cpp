@@ -1019,6 +1019,7 @@ bool CTFSniperRifle::CanFireCriticalShot( bool bIsHeadshot, CBaseEntity *pTarget
 	// If we don't auto crit on a headshot, use standard criteria to determine other crits.
 	if ( GetRifleType() == RIFLE_JARATE )
 	{
+		m_bCurrentShotIsHeadshot = bIsHeadshot; //OO//
 		return false; // Never auto crit on headshot.
 	}
 
@@ -1216,14 +1217,22 @@ float CTFSniperRifle::GetJarateTime( void ) const
 {
 	if ( m_flChargedDamage > 0.f )
 	{
-		return GetJarateTimeInternal();
+		float headshotTimeBonus = 1.5f; //OO//
+		float baseTime = GetJarateTimeInternal();
+		if (m_bCurrentShotIsHeadshot)
+		{
+			baseTime *= headshotTimeBonus; // Increase jarate time based on headshotTimeBonus
+			return baseTime;
+		}
+		
+		//return GetJarateTimeInternal();
 	}
 	else
 		return 0.0f;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Jarate duration based on charge for Sydney Sleeper //**//
 //-----------------------------------------------------------------------------
 float CTFSniperRifle::GetJarateTimeInternal( void ) const
 {

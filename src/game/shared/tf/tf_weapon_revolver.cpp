@@ -92,7 +92,7 @@ int	CTFRevolver::GetDamageType( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose:
+// Purpose: Handles Ambassador crit //**//
 //-----------------------------------------------------------------------------
 bool CTFRevolver::CanFireCriticalShot( bool bIsHeadshot, CBaseEntity *pTarget /*= NULL*/ )
 {

@@ -10014,11 +10014,7 @@ void CTFPlayer::MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *
 
 	CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iShouldFireTracer, sniper_fires_tracer );
 	
-	// Checks if the weapon is a Sniper Rifle that is not the Sydney Sleeper. Sets iShouldFireTracer to 1 if true.
-	if (WeaponID_IsSniperRifle(pWeapon->GetWeaponID()) && !(pRifle->GetRifleType() == RIFLE_JARATE)) //OO//
-	{
-		iShouldFireTracer = 1;
-	}
+	
 	// If iShouldFireTracer is 0, hides tracer effect
 	if ( !iShouldFireTracer )
 	{
@@ -10026,10 +10022,17 @@ void CTFPlayer::MaybeDrawRailgunBeam( IRecipientFilter *pFilter, CTFWeaponBase *
 	}
 
 	// Check for heatmaker
-	/*if (!iShouldFireTracer) //OO//
+	if (!iShouldFireTracer) //OO//
 	{
 		iShouldFireTracer = m_Shared.InCond( TF_COND_SNIPERCHARGE_RAGE_BUFF ) && pWeapon && WeaponID_IsSniperRifle( pWeapon->GetWeaponID() );
-	}*/
+	}
+
+	// Checks if the weapon is a Sniper Rifle that is not the Sydney Sleeper. Sets iShouldFireTracer to 1 if true.
+	if (WeaponID_IsSniperRifle(pWeapon->GetWeaponID()) && !(pRifle->GetRifleType() == RIFLE_JARATE)) //OO//
+	{
+		iShouldFireTracer = 1;
+	}
+
 	// If iShouldFireTracer is 1, sets tracer effect. If the weapon is a Sniper Rifle and is the Classic, replaces tracer effect with Classic specific effect.
 	if ( iShouldFireTracer )
 	{
