@@ -1,1 +1,0 @@
-"lang"{	"Language" "English"	"Tokens"	{		//----------------------------------------------------------------------------------------		// Attribute descriptions		"Attrib_CloakIsFeignDeath"		"Cloak Type: Feign Death.\nLeave a fake corpse on taking damage\nand temporarily gain invisibility and damage resistance."	}}

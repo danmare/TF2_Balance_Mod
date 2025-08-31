@@ -223744,7 +223744,7 @@
 		{
 			"name"	"crit boost on kill destroy"
 			"attribute_class"	"crit_boost_on_kill_destroy"
-			"description_string"	"Attrib_CritBoost_OnKillDestroy"
+			"description_string"	"#Attrib_CritBoost_OnKillDestroy"
 			"description_format"	"value_is_additive"
 			"hidden"	"0"
 			"effect_type"	"positive"

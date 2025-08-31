@@ -900,7 +900,7 @@ void CTFWeaponBaseGun::GetCustomProjectileModel( CAttribute_String *attrCustomPr
 
 
 //-----------------------------------------------------------------------------
-// Purpose: Accessor for damage, so sniper etc can modify damage
+// Purpose: Accessor for damage, so sniper etc can modify damage //**//
 //-----------------------------------------------------------------------------
 float CTFWeaponBaseGun::GetProjectileDamage( void )
 {
@@ -910,12 +910,21 @@ float CTFWeaponBaseGun::GetProjectileDamage( void )
 	CALL_ATTRIB_HOOK_FLOAT( flDamage, mult_dmg );
 
 	// Some weapons mod dmg when not disguised
-	bool bDisguised = pPlayer && pPlayer->m_Shared.InCond( TF_COND_DISGUISED );
-	if ( bDisguised )
+	// Increase damage when disguised attribute
+	bool bDisguised = pPlayer && pPlayer->m_Shared.InCond(TF_COND_DISGUISED);
+	if (bDisguised)
 	{
-		CALL_ATTRIB_HOOK_FLOAT( flDamage, mult_dmg_disguised );
+		CALL_ATTRIB_HOOK_FLOAT(flDamage, mult_dmg_disguised);
 	}
 
+	// Decrease damage when not disguised attribute
+	bool bNotDisguised = pPlayer && !pPlayer->m_Shared.InCond(TF_COND_DISGUISED); //OO//
+	if (bNotDisguised)
+	{
+		CALL_ATTRIB_HOOK_FLOAT(flDamage, mult_dmg_not_disguised);
+	}
+
+	// Rage bonus damage for Soldier and Pyro
 	if ( pPlayer && ( pPlayer->IsPlayerClass( TF_CLASS_SOLDIER ) || pPlayer->IsPlayerClass( TF_CLASS_PYRO ) ) )
 	{	
 		float flRageDamage = 1.f;

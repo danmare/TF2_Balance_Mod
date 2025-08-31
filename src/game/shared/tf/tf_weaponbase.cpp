@@ -656,7 +656,7 @@ const char *CTFWeaponBase::GetViewModel( int iViewModel ) const
 	int iHandModelIndex = 0;
 	if ( pPlayer )
 	{
-		//CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pPlayer, iHandModelIndex, override_hand_model_index );		// this is a cleaner way of doing it, but...
+		//CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pPlayer, iHandModelIndex, override_hand_model_index );		// this is a cleaner way of doing it, but...							//**//
 		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pPlayer, iHandModelIndex, wrench_builds_minisentry );			// ...the gunslinger is the only thing that uses this attribute for now
 	}
 
@@ -5109,6 +5109,29 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 		}
 	}
 
+	// Mark for death on hit if disguised.
+	float flMarkForDeathDisguised = 0.0;
+	CALL_ATTRIB_HOOK_FLOAT(flMarkForDeathDisguised, mark_for_death_disguised);
+	CTFPlayer* pPlayer = ToTFPlayer(GetPlayerOwner());
+	bool bDisguised = pPlayer && pPlayer->m_Shared.InCond(TF_COND_DISGUISED);
+
+	if (flMarkForDeathDisguised > 0.0 && bDisguised)
+	{
+		// Note: this logic isn't perfect, and can do non-obvious things in certain situations. For example,
+		// imagine that we've got two scouts -- if the first scout marks someone, and then the second scout marks
+		// the same guy, and then the first scout marks someone else, the original victim will lose his marked-
+		// for-death status. Conditions don't have any concept of owner. This could be manually tracked for this
+		// condition if it becomes a problem.
+		if (pAttacker->m_pMarkedForDeathTarget != NULL && pAttacker->m_pMarkedForDeathTarget->m_Shared.InCond(TF_COND_MARKEDFORDEATH))
+		{
+			pAttacker->m_pMarkedForDeathTarget->m_Shared.RemoveCond(TF_COND_MARKEDFORDEATH);
+		}
+
+		float flDuration = pVictim->IsMiniBoss() ? flMarkForDeathDisguised / 2 : flMarkForDeathDisguised;
+		pVictim->m_Shared.AddCond(TF_COND_MARKEDFORDEATH, flDuration, pAttacker);
+	}
+
+
 	if ( pAttacker->m_Shared.InCond( TF_COND_REGENONDAMAGEBUFF ) )
 	{
 		int nAmount = info.GetDamage() * tf_dev_health_on_damage_recover_percentage.GetFloat();
@@ -5402,6 +5425,29 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 				}
 			}
 		}
+		
+		// Mark for death on hit if disguised.
+		float flMarkForDeathDisguised = 0.0;
+		CALL_ATTRIB_HOOK_FLOAT(flMarkForDeathDisguised, mark_for_death_disguised);
+		CTFPlayer* pPlayer = ToTFPlayer(GetPlayerOwner());
+		bool bDisguised = pPlayer && pPlayer->m_Shared.InCond(TF_COND_DISGUISED);
+
+		if (flMarkForDeathDisguised > 0.0 && bDisguised)
+		{
+			// Note: this logic isn't perfect, and can do non-obvious things in certain situations. For example,
+			// imagine that we've got two scouts -- if the first scout marks someone, and then the second scout marks
+			// the same guy, and then the first scout marks someone else, the original victim will lose his marked-
+			// for-death status. Conditions don't have any concept of owner. This could be manually tracked for this
+			// condition if it becomes a problem.
+			if (pAttacker->m_pMarkedForDeathTarget != NULL && pAttacker->m_pMarkedForDeathTarget->m_Shared.InCond(TF_COND_MARKEDFORDEATH))
+			{
+				pAttacker->m_pMarkedForDeathTarget->m_Shared.RemoveCond(TF_COND_MARKEDFORDEATH);
+			}
+
+			float flDuration = pVictim->IsMiniBoss() ? flMarkForDeathDisguised / 2 : flMarkForDeathDisguised;
+			pVictim->m_Shared.AddCond(TF_COND_MARKEDFORDEATH, flDuration, pAttacker);
+		}
+
 
 		// Stun airborne enemies who are half a body length higher than attacker
 		bool bIsVictimAirborne = !( pVictim->GetFlags() & FL_ONGROUND ) && ( pVictim->GetWaterLevel() == WL_NotInWater );
@@ -5419,7 +5465,6 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 		}
 	}
 }
-
 
 //-----------------------------------------------------------------------------
 // Purpose: When owner of this weapon is hit

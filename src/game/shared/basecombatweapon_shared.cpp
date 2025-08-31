@@ -1986,31 +1986,6 @@ void CBaseCombatWeapon::StopWeaponSound( WeaponSound_t sound_type )
 			StopSound( GetOwner()->entindex(), shootsound );
 		}
 	}
-	
-	// Are you using the Your Eternal Reward? //??//
-	CTFPlayer CanDisguise_OnKill();
-
-	// Don't play sound in kill if using Your Eternal Reward //??//
-	if  (CanDisguise_OnKill)
-	{
-		if (GetOwner())
-		{
-			StopSound(GetOwner()->entindex(), shootsound);
-		}
-	}
-	else
-	{
-		// Play weapon sound from the owner
-		if ( GetOwner() )
-		{
-			StopSound( GetOwner()->entindex(), shootsound );
-		}
-		// If no owner play from the weapon (this is used for thrown items)
-		else
-		{
-			StopSound( entindex(), shootsound );
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
