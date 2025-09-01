@@ -572,7 +572,14 @@ int CObjectSapper::OnTakeDamage( const CTakeDamageInfo &info )
 		}
 		if ( iDmgSappers == 0 )
 			return 0;
+
+		float sapperPenalty = 0.0f; //??//
+		if (pWeapon && sapperPenalty > 0)
+		{
+			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWeapon, sapperPenalty, dmg_penalty_sapper);
+		}
 	}
+
 
 	// Is the damage from something other than another sapper? (which might be on our matching teleporter)
 	if ( !( info.GetDamageType() & DMG_FROM_OTHER_SAPPER ) )

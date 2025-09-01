@@ -26106,6 +26106,11 @@
 					"attribute_class"	"set_dmg_apply_to_sapper"
 					"value"	"1"
 				}
+				"damage penalty to sappers"
+				{
+					"attribute_class"	"dmg_penalty_sappers"
+					"value" ".5"
+				}
 			}
 			"visuals"
 			{
@@ -223740,7 +223745,17 @@
 			"armory_desc"	"on_wearer"
 			"stored_as_integer"	"0"
 		}
-		"882"
+		
+		"996"
+		{
+			"name"	"damage penalty to sappers"
+			"attribute_class"	"dmg_penalty_sappers"
+			"description_string"	"#Attrib_Dmg_Penalty_Sappers"
+			"description_format"	"value_is_percentage"
+			"hidden"	"0"
+			"effect_type"	"negative"
+		}
+		"997"
 		{
 			"name"	"crit boost on kill destroy"
 			"attribute_class"	"crit_boost_on_kill_destroy"
@@ -223749,7 +223764,7 @@
 			"hidden"	"0"
 			"effect_type"	"positive"
 		}
-		"883"
+		"998"
 		{
 			"name"	"damage penalty while not disguised"
 			"attribute_class"		"mult_dmg_not_disguised"
@@ -223759,7 +223774,7 @@
 			"effect_type"	"negative"
 			"stored_as_integer"	"0"
 		}
-		"884"
+		"999"
 		{
 			"name"	"mark for death while disguised"
 			"attribute_class"		"mark_for_death_disguised"
