@@ -5406,6 +5406,7 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 			float flDuration = pVictim->IsMiniBoss() ? tf_dev_marked_for_death_lifetime.GetFloat() / 2 : tf_dev_marked_for_death_lifetime.GetFloat();
 			pVictim->m_Shared.AddCond( TF_COND_MARKEDFORDEATH, flDuration, pAttacker );
 
+			// Remember who we marked for death last, so we can clear it if we mark someone else
 			pAttacker->m_pMarkedForDeathTarget = pVictim;
 
 			// ACHIEVEMENT_TF_MVM_SCOUT_MARK_FOR_DEATH
@@ -5439,13 +5440,16 @@ void CTFWeaponBase::ApplyOnHitAttributes( CBaseEntity *pVictimBaseEntity, CTFPla
 			// the same guy, and then the first scout marks someone else, the original victim will lose his marked-
 			// for-death status. Conditions don't have any concept of owner. This could be manually tracked for this
 			// condition if it becomes a problem.
-			if (pAttacker->m_pMarkedForDeathTarget != NULL && pAttacker->m_pMarkedForDeathTarget->m_Shared.InCond(TF_COND_MARKEDFORDEATH))
+			if ( pAttacker->m_pMarkedForDeathTarget != NULL && pAttacker->m_pMarkedForDeathTarget->m_Shared.InCond( TF_COND_MARKEDFORDEATH ) )
 			{
 				pAttacker->m_pMarkedForDeathTarget->m_Shared.RemoveCond(TF_COND_MARKEDFORDEATH);
 			}
 
 			float flDuration = pVictim->IsMiniBoss() ? flMarkForDeathDisguised / 2 : flMarkForDeathDisguised;
 			pVictim->m_Shared.AddCond(TF_COND_MARKEDFORDEATH, flDuration, pAttacker);
+
+			// Remember who we marked for death last, so we can clear it if we mark someone else
+			pAttacker->m_pMarkedForDeathTarget = pVictim;
 		}
 
 
