@@ -2,7 +2,7 @@
 {
 	"tr_walkway_rc2"
 	{
-		"viewed"		"174"
+		"viewed"		"178"
 	}
 	"ctf_2fort"
 	{

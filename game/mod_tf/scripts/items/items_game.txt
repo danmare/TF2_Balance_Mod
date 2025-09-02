@@ -26438,7 +26438,7 @@
 			"craft_class"	""
 			"craft_material_type"		""
 			"item_slot"	"secondary"
-			"item_quality"	"unique"
+			"item_quality"	"normal"
 			"item_logname"	"samrevolver"
 			"item_iconname"	"samrevolver"
 			"propername"	"1"
