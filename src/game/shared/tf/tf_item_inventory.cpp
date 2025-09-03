@@ -217,7 +217,7 @@ CTFInventoryManager::CTFInventoryManager( void )
 CTFInventoryManager::~CTFInventoryManager( void )
 {
 	m_pBaseLoadoutItems.PurgeAndDeleteElements();
-	m_pCustomLoadoutItems.PurgeAndDeleteElements(); //??//
+	m_pCustomLoadoutItems.PurgeAndDeleteElements(); //OO//
 }
 
 //-----------------------------------------------------------------------------
@@ -230,10 +230,12 @@ void CTFInventoryManager::PostInit( void )
 }
 
 //-----------------------------------------------------------------------------
-CEconItemView* CTFInventoryManager::AddCustomItem(int id) //??//
+// Purpose: Generate Custom Items in backpack //OO//
+//-----------------------------------------------------------------------------
+CEconItemView* CTFInventoryManager::AddCustomItem(int id)
 {
 	CEconItemView* pItemView = new CEconItemView;
-	CEconItem* pItem = new CEconItem();
+	CEconItem* pItem = new CEconItem;
 	pItem->m_ulID = id;
 	pItem->m_unAccountID = 0;
 	pItem->m_unDefIndex = id;
@@ -251,32 +253,31 @@ void CTFInventoryManager::GenerateBaseItems(void)
 {
 	// Purge our lists and make new
 	m_pBaseLoadoutItems.PurgeAndDeleteElements();
-	m_pCustomLoadoutItems.PurgeAndDeleteElements(); //??//
+	m_pCustomLoadoutItems.PurgeAndDeleteElements(); //OO//
 
 	// Load a base top level invalid item
 	{
 		m_pDefaultItem = new CEconItemView;
 		m_pDefaultItem->Invalidate();
 	}
-	//
+	// Add base TF2 items
 	const CEconItemSchema::BaseItemDefinitionMap_t& mapItems = GetItemSchema()->GetBaseItemDefinitionMap();
 	int iStart = 0;
 	for (int it = iStart; it != mapItems.InvalidIndex(); it = mapItems.NextInorder(it))
 	{
-		CEconItemView *pItem = new CEconItemView;
+		CEconItemView* pItem = new CEconItemView;
 		pItem->Init(mapItems[it]->GetDefinitionIndex(), AE_USE_SCRIPT_VALUE, AE_USE_SCRIPT_VALUE, false);
 		m_pBaseLoadoutItems.AddToTail(pItem);
 	}
-	const CEconItemSchema::BaseItemDefinitionMap_t& mapItemsCustom = GetItemSchema()->GetCustomItemDefinitionMap();	//??//
-	iStart = 0;	//??//
-	if (mapItemsCustom.Count() != 0) //??//
+	// Add custom items //OO//
+	const CEconItemSchema::BaseItemDefinitionMap_t& mapItemsCustom = GetItemSchema()->GetCustomItemDefinitionMap();
+	iStart = 0;
+	if (mapItemsCustom.Count() != 0)
 	{
 		for (int it = iStart; it != mapItemsCustom.InvalidIndex(); it = mapItemsCustom.NextInorder(it))
-		{
 			AddCustomItem(mapItemsCustom[it]->GetDefinitionIndex());
-		}
-		Msg("Loaded %i custom TF@ items\n", mapItemsCustom.Count());
-	}
+		Msg("Loaded %i custom items.\n", mapItemsCustom.Count());
+	};
 }
 
 #ifdef CLIENT_DLL
@@ -292,23 +293,20 @@ bool CTFInventoryManager::EquipItemInLoadout( int iClass, int iSlot, itemid_t iI
 	if ( iItemID == INVALID_ITEM_ID )
 		return m_LocalInventory.ClearLoadoutSlot( iClass, iSlot );
 
-	CEconItemView *pItem = m_LocalInventory.GetInventoryItemByItemID( iItemID );
+	CEconItemView* pItem = m_LocalInventory.GetInventoryItemByItemID( iItemID );
 	//if ( !pItem )		//@@//
 	//	return false;	//@@//
-	if (iItemID < 100000) //??//
+	if (iItemID < 100000) //OO//
 	{
 		int count = TFInventoryManager()->GetCustomItemCount();
-		for (int i = 0; i < count; i++) 
+		for (int i = 0; i < count; i++ )
 		{
 			pItem = TFInventoryManager()->GetCustomItem(i);
-			if (pItem && pItem->GetItemID() == iItemID) 
-			{
-				pItem = TFInventoryManager()->GetCustomItem(i);//
+			if (pItem && pItem->GetItemDefIndex() == iItemID )
 				break;
-			}
 		}
 	}
-	if ( !pItem )
+	if ( !pItem ) //OO//
 		return false;
 
 	// We check for validity on the GC when we equip items, but we can't really trust anyone
@@ -371,14 +369,14 @@ int	CTFInventoryManager::GetAllUsableItemsForSlot( int iClass, int iSlot, CUtlVe
 		pList->AddToTail( m_LocalInventory.GetItem(i) );
 	}
 
-	iCount = m_pCustomLoadoutItems.Count(); //??//
-	for (int i = 0; i < iCount; i++)
+	iCount = m_pCustomLoadoutItems.Count(); //OO//
+	for (int i = 0; i < iCount; i++) //OO//
 	{
-		CEconItemView* pItem = m_pCustomLoadoutItems[i]; 
-		CTFItemDefinition* pItemData = pItem->GetStaticData(); 
+		CEconItemView* pItem = m_pCustomLoadoutItems[i];
+		CTFItemDefinition* pItemData = pItem->GetStaticData();
 		if (!bIsAccountIndex && !pItemData->CanBeUsedByClass(iClass))
 			continue;
-		if(iSlot >= 0 && pItem->GetStaticData()->GetLoadoutSlot(iClass) != iSlot) 
+		if (iSlot >= 0 && pItem->GetStaticData()->GetLoadoutSlot(iClass) != iSlot)
 			continue;
 		pList->AddToTail(pItem);
 	}
@@ -1101,21 +1099,18 @@ void CTFPlayerInventory::EquipLocal(uint64 ulItemID, equipped_class_t unClass, e
 	// We will never get those messages, so we do everything locally.
 
 	// Unequip whatever was previously in the slot.
-	itemid_t ulPreviousItem = m_LoadoutItems[unClass][unSlot]; //??//
-	if (ulPreviousItem != 0 && ulPreviousItem < 100000)
+	itemid_t ulPreviousItem = m_LoadoutItems[unClass][unSlot]; //OO//
+	if (ulPreviousItem != 0 && ulPreviousItem < 100000)  //OO//
 	{
 		int count = TFInventoryManager()->GetCustomItemCount();
 		for (int i = 0; i < count; i++)
 		{
 			CEconItemView* pItem = TFInventoryManager()->GetCustomItem(i);
 			if (pItem && pItem->GetItemDefIndex() == ulPreviousItem)
-			{
 				pItem->GetSOCData()->UnequipFromClass(unClass);
-			}
 		}
 		CEconItemView* pPreviousItem = GetInventoryItemByItemID(ulPreviousItem);
-		if (pPreviousItem)
-		{
+		if (pPreviousItem) {
 			pPreviousItem->GetSOCData()->UnequipFromClass(unClass);
 		}
 	}
@@ -1123,19 +1118,17 @@ void CTFPlayerInventory::EquipLocal(uint64 ulItemID, equipped_class_t unClass, e
 	{
 		CEconItemView* pPreviousItem = GetInventoryItemByItemID(ulPreviousItem);
 		if (pPreviousItem)
-		{
 			pPreviousItem->GetSOCData()->UnequipFromClass(unClass);
-		}
 	}
 
 	// Equip the new item and add it to our loadout.
-	if (ulItemID < 100000) //??//
+	if (ulItemID < 100000)  //OO//
 	{
 		int count = TFInventoryManager()->GetCustomItemCount();
 		CEconItemView* pItem;
 		for (int i = 0; i < count; i++)
 		{
-			CEconItemView* pItem = TFInventoryManager()->GetCustomItem(i);
+			pItem = TFInventoryManager()->GetCustomItem(i);
 			if (pItem && pItem->GetItemDefIndex() == ulItemID)
 			{
 				pItem->GetSOCData()->Equip(unClass, unSlot);
@@ -1146,17 +1139,7 @@ void CTFPlayerInventory::EquipLocal(uint64 ulItemID, equipped_class_t unClass, e
 		{
 			pItem = TFInventoryManager()->AddCustomItem(ulItemID);
 			if (pItem && pItem->GetItemDefIndex() == ulItemID)
-			{ 
 				pItem->GetSOCData()->Equip(unClass, unSlot);
-			}
-			else
-			{
-				CEconItemView *pItem = GetInventoryItemByItemID(ulItemID);
-				if (pItem)
-				{
-					pItem->GetSOCData()->Equip(unClass, unSlot);
-				}
-			}
 		}
 	}
 
@@ -1166,6 +1149,13 @@ void CTFPlayerInventory::EquipLocal(uint64 ulItemID, equipped_class_t unClass, e
 	//{
 	//	pItem->GetSOCData()->Equip(unClass, unSlot);
 	//}
+
+	else
+	{
+		CEconItemView* pItem = GetInventoryItemByItemID(ulItemID);
+		if (pItem)
+			pItem->GetSOCData()->Equip(unClass, unSlot);
+	}
 
 	m_LoadoutItems[unClass][unSlot] = ulItemID;
 
@@ -1568,6 +1558,21 @@ CEconItemView *CTFPlayerInventory::GetItemInLoadout( int iClass, int iSlot )
 			// we need to validate their position on the server when we retrieve them.
 			if ( pItem && AreSlotsConsideredIdentical( pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot( iClass ), iSlot ) )
 				return pItem;
+
+			if (m_LoadoutItems[iClass][iSlot] < 100000)  //OO//
+			{
+				int count = TFInventoryManager()->GetCustomItemCount();
+				for (int i = 0; i < count; i++)
+				{
+					CEconItemView *pItem = TFInventoryManager()->GetCustomItem(i);
+					if (pItem && pItem->GetItemDefIndex() == m_LoadoutItems[iClass][iSlot])
+					{
+						if (pItem && AreSlotsConsideredIdentical(pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot(iClass), iSlot))
+							return pItem;
+					}
+				}
+				return TFInventoryManager()->AddCustomItem( m_LoadoutItems[iClass][iSlot] );
+			}
 		}
 	}
 
@@ -1591,20 +1596,6 @@ CEconItemView *CTFPlayerInventory::GetCacheServerItemInLoadout( int iClass, int 
 		// we need to validate their position on the server when we retrieve them.
 		if ( pItem && AreSlotsConsideredIdentical( pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot( iClass ), iSlot ) )
 			return pItem;
-		if (m_LoadoutItems[iClass][iSlot] < 100000) //??//
-		{
-			int count = TFInventoryManager()->GetCustomItemCount();
-			for (int i = 0; i < TFInventoryManager()->GetCustomItemCount(); i++)
-			{
-				CEconItemView* pItem = TFInventoryManager()->GetCustomItem(i);
-				if (pItem && pItem->GetItemDefIndex() == m_LoadoutItems[iClass][iSlot])
-				{
-					if(AreSlotsConsideredIdentical(pItem->GetStaticData()->GetEquipType(), pItem->GetStaticData()->GetLoadoutSlot(iClass), iSlot))
-					return pItem;
-				}
-			}
-			return TFInventoryManager()->AddCustomItem(m_LoadoutItems[iClass][iSlot]);
-		}
 	}
 
 	return TFInventoryManager()->GetBaseItemForClass( iClass, iSlot );
