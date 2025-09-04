@@ -186,7 +186,8 @@ void CTFRevolver::PrimaryAttack( void )
 //-----------------------------------------------------------------------------
 float CTFRevolver::GetWeaponSpread( void )
 {
-	float fSpread = BaseClass::GetWeaponSpread();
+	// Get the base spread and reduce it by 20%
+	float fSpread = BaseClass::GetWeaponSpread() * 0.8f; //00//
 
 	if ( CanHeadshot() )
 	{
