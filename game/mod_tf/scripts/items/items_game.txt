@@ -20499,6 +20499,11 @@
 					"attribute_class"	"airblast_vulnerability_multiplier"
 					"value" "1.2"
 				}
+				"fixed_shot_pattern"
+				{
+					"attribute_class" 	"fixed_shot_pattern"
+					"value" "1"
+				}
 			}
 			"visuals"
 			{
@@ -23020,6 +23025,11 @@
 				{
 					"attribute_class"	"special_taunt"
 					"value" "1"
+				}
+				"crit mod disabled"
+				{
+					"attribute_class"	"mult_crit_chance"
+					"value"	"0"
 				}
 			}
 			"mouse_pressed_sound"	"ui/item_wood_pole_pickup.wav"
@@ -29241,15 +29251,10 @@
 			}
 			"attributes"
 			{
-				"afterburn immunity"
+				"max health additive bonus"
 				{
-					"attribute_class"	"afterburn_immunity"
-					"value"			"1"
-				}
-				"dmg taken from fire reduced"
-				{
-					"attribute_class"	"mult_dmgtaken_from_fire"
-					"value"			"0.5"
+					"attribute_class"	"add_maxhealth"
+					"value" "25"
 				}
 				"allowed in medieval mode"
 				{
@@ -38338,6 +38343,11 @@
 				{
 					"attribute_class"	"mark_for_death_disguised"
 					"value"	"5"
+				}
+				"sabotage buildings while disguised"
+				{
+					"attribute_class"	"mod_sabotage_disguised"
+					"value" "5"
 				}
 			}
 			"visuals"
@@ -48263,12 +48273,12 @@
 				"hype resets on jump"
 				{
 					"attribute_class"	"hype_resets_on_jump"
-					"value"	"75"
+					"value"	"50"
 				}
 				"lose hype on take damage"
 				{
 					"attribute_class"	"lose_hype_on_take_damage"
-					"value"	"4"
+					"value"	"2"
 				}
 				"clip size penalty"
 				{
@@ -223784,7 +223794,7 @@
 			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
-
+		//Start of custom attributes desending
 
 		"1000"
 		{
