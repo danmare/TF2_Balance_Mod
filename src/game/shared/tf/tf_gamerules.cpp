@@ -5875,7 +5875,7 @@ void CTFGameRules::RadiusDamage( const CTakeDamageInfo &info, const Vector &vecS
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose: Handles a lot of damage modification attributes, including critical hits and mini-crits //**//
 //-----------------------------------------------------------------------------
 bool CTFGameRules::ApplyOnDamageModifyRules( CTakeDamageInfo &info, CBaseEntity *pVictimBaseEntity, bool bAllowDamage )
 {
@@ -6232,9 +6232,10 @@ bool CTFGameRules::ApplyOnDamageModifyRules( CTakeDamageInfo &info, CBaseEntity 
 					// no airborne crits or mini crits in Mannpower since the whole idea is to fly around. It's too easy to score crits against grappling players, and we don't want to penalize airborne targets
 					if ( !IsPowerupMode() )
 					{
+						// Reserve Shooter Mini-Crits
 						int iMiniCritAirborne = 0;
 						CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iMiniCritAirborne, mini_crit_airborne );
-						if ( iMiniCritAirborne == 1 &&	pVictim &&	( pVictim->InAirDueToExplosion() || pVictim->InAirDueToKnockback()) ) //OO//
+						if ( iMiniCritAirborne == 1 &&	pVictim &&	( pVictim->InAirDueToExplosion()) )
 						{
 							bAllSeeCrit = true;
 							info.SetCritType( CTakeDamageInfo::CRIT_MINI );
@@ -6279,7 +6280,7 @@ bool CTFGameRules::ApplyOnDamageModifyRules( CTakeDamageInfo &info, CBaseEntity 
 
 			if ( pTFAttacker && pVictim )
 			{
-				// MiniCrit a victims back at close range
+				// Back Scatter MiniCrit a victims back at close range
 				int iMiniCritBackAttack = 0;
 				CALL_ATTRIB_HOOK_INT_ON_OTHER( pWeapon, iMiniCritBackAttack, closerange_backattack_minicrits );
 				Vector toEnt = pVictim->GetAbsOrigin() - pTFAttacker->GetAbsOrigin();
@@ -6301,6 +6302,7 @@ bool CTFGameRules::ApplyOnDamageModifyRules( CTakeDamageInfo &info, CBaseEntity 
 		}
 	}
 
+	// Fan O'War Mini-Crits become Crits
 	if ( info.GetCritType() == CTakeDamageInfo::CRIT_MINI )
 	{
 		if ( IsPowerupMode() && ( info.GetDamageType() & DMG_MELEE ) )
