@@ -731,44 +731,44 @@ void CTFStunBall::ApplyBallImpactEffectOnVictim( CBaseEntity *pOther )
 	float flLifeTimeRatio = flLifeTime / FLIGHT_TIME_TO_MAX_STUN;
 	if ( flLifeTimeRatio > 0.1f )
 	{
-		//bool bMax = flLifeTimeRatio >= 1.f;
-		//int iStunFlags = ( bMax ) ? TF_STUN_SPECIAL_SOUND | TF_STUN_MOVEMENT : TF_STUN_SOUND | TF_STUN_MOVEMENT;
-		//float flStunAmount = 0.5f;
-		//float flStunDuration = Max( 2.f, tf_scout_stunball_base_duration.GetFloat() * flLifeTimeRatio );
+		bool bMax = flLifeTimeRatio >= 1.f;
+		int iStunFlags = ( bMax ) ? TF_STUN_SPECIAL_SOUND | TF_STUN_MOVEMENT : TF_STUN_SOUND | TF_STUN_MOVEMENT;
+		float flStunAmount = 0.5f;
+		float flStunDuration = Max( 2.f, tf_scout_stunball_base_duration.GetFloat() * flLifeTimeRatio );
 		//if ( bMax )
 		//{
 		//	flStunDuration += 1.0;
 		//}
 
-		// MvM bots
-		if ( TFGameRules() && TFGameRules()->GameModeUsesUpgrades() && pPlayer->IsBot() )
-		{
-			// Distance mod
-			flStunAmount = ( bMax ) ? 1.f : RemapValClamped( flLifeTimeRatio, 0.1f, 0.99f, 0.5f, 0.75 );
+		//// MvM bots
+		//if ( TFGameRules() && TFGameRules()->GameModeUsesUpgrades() && pPlayer->IsBot() )
+		//{
+		//	// Distance mod
+		//	flStunAmount = ( bMax ) ? 1.f : RemapValClamped( flLifeTimeRatio, 0.1f, 0.99f, 0.5f, 0.75 );
 
-			bool bBoss = TFGameRules() && TFGameRules()->GameModeUsesMiniBosses() && ( pPlayer->IsMiniBoss() || pPlayer->GetModelScale() > 1.0f );
-			if ( bMax && !bBoss )
-			{
-				iStunFlags |= TF_STUN_CONTROLS; 
-			}
-		}
+		//	bool bBoss = TFGameRules() && TFGameRules()->GameModeUsesMiniBosses() && ( pPlayer->IsMiniBoss() || pPlayer->GetModelScale() > 1.0f );
+		//	if ( bMax && !bBoss )
+		//	{
+		//		iStunFlags |= TF_STUN_CONTROLS; 
+		//	}
+		//}
 
-		CTF_GameStats.Event_PlayerStunBall( pOwner, ( bMax ) ? true : false );
+		//CTF_GameStats.Event_PlayerStunBall( pOwner, ( bMax ) ? true : false );
 
-		if ( pPlayer->GetWaterLevel() != WL_Eyes )
-		{
-			pPlayer->m_Shared.StunPlayer( flStunDuration, flStunAmount, iStunFlags, pOwner );
+		//if ( pPlayer->GetWaterLevel() != WL_Eyes )
+		//{
+		//	pPlayer->m_Shared.StunPlayer( flStunDuration, flStunAmount, iStunFlags, pOwner );
 
-			if ( pPlayer->GetUserID() == m_iOriginalOwnerID )
-			{
-				// We just stunned a scout with their own ball.
-				// Give the player an achievement for this.
-				if ( pOwner->IsPlayerClass( TF_CLASS_SCOUT ) )
-				{
-					pOwner->AwardAchievement( ACHIEVEMENT_TF_SCOUT_STUN_SCOUT_WITH_THEIR_BALL );
-				}
-			}
-		}
+		//	if ( pPlayer->GetUserID() == m_iOriginalOwnerID )
+		//	{
+		//		// We just stunned a scout with their own ball.
+		//		// Give the player an achievement for this.
+		//		if ( pOwner->IsPlayerClass( TF_CLASS_SCOUT ) )
+		//		{
+		//			pOwner->AwardAchievement( ACHIEVEMENT_TF_SCOUT_STUN_SCOUT_WITH_THEIR_BALL );
+		//		}
+		//	}
+		//}
 	}
 
 	// Give 'em a love tap.
