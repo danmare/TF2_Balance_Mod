@@ -106,7 +106,7 @@ PRECACHE_WEAPON_REGISTER( tf_projectile_stun_ball );
 #if defined( GAME_DLL )
 ConVar tf_scout_stunball_base_duration( "tf_scout_stunball_base_duration", "6.0", FCVAR_DEVELOPMENTONLY );
 ConVar tf_scout_stunball_base_speed( "tf_scout_stunball_base_speed", "3000", FCVAR_DEVELOPMENTONLY );
-ConVar sv_proj_stunball_damage( "sv_proj_stunball_damage", "15", FCVAR_DEVELOPMENTONLY );
+ConVar sv_proj_stunball_damage( "sv_proj_stunball_damage", "45", FCVAR_DEVELOPMENTONLY ); //OO//
 #endif
 // -- TFStunBall
 
@@ -731,14 +731,14 @@ void CTFStunBall::ApplyBallImpactEffectOnVictim( CBaseEntity *pOther )
 	float flLifeTimeRatio = flLifeTime / FLIGHT_TIME_TO_MAX_STUN;
 	if ( flLifeTimeRatio > 0.1f )
 	{
-		bool bMax = flLifeTimeRatio >= 1.f;
-		int iStunFlags = ( bMax ) ? TF_STUN_SPECIAL_SOUND | TF_STUN_MOVEMENT : TF_STUN_SOUND | TF_STUN_MOVEMENT;
-		float flStunAmount = 0.5f;
-		float flStunDuration = Max( 2.f, tf_scout_stunball_base_duration.GetFloat() * flLifeTimeRatio );
-		if ( bMax )
-		{
-			flStunDuration += 1.0;
-		}
+		//bool bMax = flLifeTimeRatio >= 1.f;
+		//int iStunFlags = ( bMax ) ? TF_STUN_SPECIAL_SOUND | TF_STUN_MOVEMENT : TF_STUN_SOUND | TF_STUN_MOVEMENT;
+		//float flStunAmount = 0.5f;
+		//float flStunDuration = Max( 2.f, tf_scout_stunball_base_duration.GetFloat() * flLifeTimeRatio );
+		//if ( bMax )
+		//{
+		//	flStunDuration += 1.0;
+		//}
 
 		// MvM bots
 		if ( TFGameRules() && TFGameRules()->GameModeUsesUpgrades() && pPlayer->IsBot() )
