@@ -66,7 +66,7 @@ public:
 	virtual bool	HasMotionCloak( void ) { return (GetInvisType() == INVIS_MOTION_CLOAK); } 
 
 	virtual void	SetFeignDeathState( bool bEnabled );
-	virtual void	SetCloakRates();
+	virtual void	SetCloakRates( void );
 
 	virtual bool	ActivateInvisibilityWatch( void );
 	virtual void	CleanupInvisibilityWatch( void );

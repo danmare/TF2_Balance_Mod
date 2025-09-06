@@ -65,7 +65,6 @@ enum
 
 #define SHIELD_NORMAL_VALUE		0.33f
 #define SHIELD_MAX_VALUE		0.10f
-#define SABOTAGE_VALUE			1.35f //??//
 
 // ------------------------------------------------------------------------ //
 // Resupply object that's built by the player

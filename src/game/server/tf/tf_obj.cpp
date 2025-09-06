@@ -2083,17 +2083,6 @@ int CBaseObject::OnTakeDamage( const CTakeDamageInfo &info )
 		gameeventmanager->FireEvent( event );
 	}
 
-	//CTakeDamageInfo newInfo = info; //??//
-	//bool bIsSabotaged = (); //??//
-	//float flSabotage = 0; //??//
-	//CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(info.GetWeapon(), flSabotage, mod_sabotage); //??//
-	//if (flSabotage) //??//
-	//{
-	//	float flDamage = newInfo.GetDamage();
-	//	flDamage *= SABOTAGE_VALUE;
-	//	newInfo.SetDamage(flDamage);
-	//}
-
 	return flDamage;
 }
 
