@@ -2341,6 +2341,22 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 					}
 				}
 
+				float flReductionAmount = 1.0f; //??//
+				//CALL_ATTRIB_HOOK_FLOAT(flReductionAmount, decrease_debuff_duration);
+				//DevLog("decrease_debuff_duration %.2f\n", flReductionAmount);
+				if (ConditionExpiresFast((ETFCond)i) && flReductionAmount < 1.0f)
+				{
+					flReductionAmount = 2 - flReductionAmount;
+					if (i == TF_COND_URINE)
+					{
+						flReduction += (flReductionAmount * flReduction);
+					}
+					else
+					{
+						flReduction += (flReductionAmount * flReduction * 4);
+					}
+				}
+
 				m_ConditionData[i].m_flExpireTime = MAX( m_ConditionData[i].m_flExpireTime - flReduction, 0 );
 
 				if ( m_ConditionData[i].m_flExpireTime == 0 )
@@ -9656,17 +9672,16 @@ bool CTFPlayerShared::AddToSpyCloakMeter( float val, bool bForce )
 		else
 		{
 			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pWpn, val, ReducedCloakFromAmmo );
-			
-			// Dead Ringer cloak cap
-			float flCloakCap = 1.0f; //OO//
-			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWpn, flCloakCap, CloakCapFromAmmo); //OO//
-			if (flCloakCap < 1.0f)  //OO//
-			{
-				// Need to figure out math so that it will display correctly on the HUD.
-				// Dead Ringer's 35% cloak cap is currently hard coded into tf_english.txt
-				// If we want to change it, we need to change the hud code as well.
-				val = MIN(val, flCloakCap);
-			}
+		}
+
+        float flCloakCap = 1.0f;	//??//
+        CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWpn, flCloakCap, CloakCapFromAmmo);
+		flCloakCap = 100 * flCloakCap;
+
+		if ( flCloakCap < 100 )
+		{
+			float dummyVal = val;
+			val = MIN(dummyVal, flCloakCap);
 		}
 	}
 
@@ -11050,6 +11065,53 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 		}
 	}
 	return maxfbspeed;
+}
+
+
+//-----------------------------------------------------------------------------
+// Purpose: Decrease Debuff duration //??//
+//-----------------------------------------------------------------------------
+void CTFPlayerShared::DecreaseDebuffDuration (void)
+{
+	float flReductionAmount = 1.0f;
+	CTFWeaponBase* pActiveWeapon = m_pOuter->GetActiveTFWeapon();
+
+	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(m_pOuter, flReductionAmount, decrease_debuff_duration);
+
+
+#ifdef GAME_DLL
+	if (flReductionAmount >= 1.0f)
+		return;
+
+	else
+	{
+		float flReduction = (gpGlobals->frametime * 0.75f);
+		for (int i = 0; g_aDebuffConditions[i] != TF_COND_LAST; i++)
+		{
+			if (InCond(g_aDebuffConditions[i]))
+			{
+				if (m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime != PERMANENT_CONDITION)
+				{
+					m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime = MAX(m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime - flReduction, 0);
+				}
+				// Burning and Bleeding and extra timers
+				if (g_aDebuffConditions[i] == TF_COND_BURNING)
+				{
+					// Reduce the duration of this burn
+					m_flAfterburnDuration -= flReduction;
+				}
+				else if (g_aDebuffConditions[i] == TF_COND_BLEEDING)
+				{
+					// Reduce the duration of this bleeding 
+					FOR_EACH_VEC(m_PlayerBleeds, i)
+					{
+						m_PlayerBleeds[i].flBleedingRemoveTime -= flReduction;
+					}
+				}
+			}
+		}
+	}
+#endif
 }
 
 void CTFPlayer::TeamFortress_SetSpeed()
