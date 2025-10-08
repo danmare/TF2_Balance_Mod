@@ -23007,7 +23007,7 @@
 			}
 			"attributes"
 			{
-				"mod bat launches balls"
+				"mod bat launches balls2"
 				{
 					"attribute_class"	"set_weapon_mode"
 					"value"	"1"
@@ -29248,15 +29248,15 @@
 			}
 			"attributes"
 			{
-				"max health additive bonus"
+				"afterburn immunity"
 				{
-					"attribute_class"	"add_maxhealth"
-					"value" "25"
-				}	
-				"decrease debuff duration"
+					"attribute_class"	"afterburn_immunity"
+					"value"			"1"
+				}
+				"dmg taken from fire reduced"
 				{
-					"attribute_class"	"decrease_debuff_duration"
-					"value"			"1.5"
+					"attribute_class"	"mult_dmgtaken_from_fire"
+					"value"			"0.5"
 				}
 				"allowed in medieval mode"
 				{
@@ -40249,15 +40249,10 @@
 			}
 			"attributes"
 			{
-				"crit boost on kill destroy"
-				{
-					"attribute_class"	"crit_boost_on_kill_destroy"
-					"value"	"3"
-				}
 				"sapper kills collect crits"
 				{
 					"attribute_class"	"sapper_kills_collect_crits"
-					"value" "1"
+					"value"	"1"
 				}
 				"damage penalty"
 				{
@@ -223760,6 +223755,27 @@
 			"hidden"	"0"
 			"effect_type"	"negative"
 			"armory_desc"	"on_wearer"
+			"stored_as_integer"	"0"
+		}
+		
+		"991"
+		{
+			"name"	"mod bat launches balls2"
+			"attribute_class"	"set_weapon_mode"
+			"description_string"	"#Attrib_BatLaunchesBalls2"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
+			"stored_as_integer"	"0"
+		}
+		"992"
+		{
+			"name"	"health packs overheal"
+			"attribute_class"	"healthpacks_overheal"
+			"description_string"	"#Attrib_Healthpack_Overheal"
+			"description_format"	"value_is_additive"
+			"hidden"	"0"
+			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
 		"993"
