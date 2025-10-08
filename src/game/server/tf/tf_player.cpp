@@ -114,8 +114,6 @@
 #include "gcsdk/gcclient_sharedobjectcache.h"
 #include "tf_party.h"
 
-#include "tf_weapon_revolver.h" //??//
-
 #ifdef TF_RAID_MODE
 #include "bot_npc/bot_npc_decoy.h"
 #include "raid/tf_raid_logic.h"
@@ -10284,6 +10282,7 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 
 		float flSelfPushMult = 1.0;
 		CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( info.GetWeapon(), flSelfPushMult, mult_dmgself_push_force );
+
 		
 		if ( IsPlayerClass( TF_CLASS_SOLDIER ) )
 		{
@@ -10362,10 +10361,7 @@ void CTFPlayer::ApplyPushFromDamage( const CTakeDamageInfo &info, Vector vecDir 
 		}
 		else
 		{
-
-			float flDamageForceScale = CALL_ATTRIB_HOOK_FLOAT(flDamageForceScale, mult_knockback); //??//
 			CTFWeaponBase *pWeapon = dynamic_cast<CTFWeaponBase*>(info.GetWeapon());
-
 			if ( pWeapon && (pWeapon->GetWeaponID() == TF_WEAPON_COMPOUND_BOW) )
 			{
 				vecForce = vecDir * -DamageForce( WorldAlignSize(), info.GetDamage(), tf_damageforcescale_other.GetFloat() );
@@ -11154,14 +11150,6 @@ void CTFPlayer::Event_KilledOther( CBaseEntity *pVictim, const CTakeDamageInfo &
 				{
 					bPlayspeech = false;
 				}
-				
-				CTFRevolver *pRevolver = dynamic_cast<CTFRevolver*>(info.GetWeapon());
-				int iCritBoost = 0;
-				CALL_ATTRIB_HOOK_INT_ON_OTHER(pRevolver, iCritBoost, add_onkill_critboost_time);
-				if ( pRevolver && iCritBoost)
-				{ 
-					m_Shared.AddCond(TF_COND_CRITBOOSTED_ON_KILL, iCritBoost + 1);
-				}
 			}
 		}
 
@@ -11189,13 +11177,6 @@ void CTFPlayer::Event_KilledOther( CBaseEntity *pVictim, const CTakeDamageInfo &
 			{
 				// Perceptually, people seem to think the effect is shorter than the stated time, so we cheat by adding a tad more for that
 				m_Shared.AddCond( TF_COND_ENERGY_BUFF, iMiniCritBoost + 1 );
-			}
-
-			CALL_ATTRIB_HOOK_INT_ON_OTHER(pWeapon, iCritBoost, crit_boost_on_kill_destroy); //??//
-			if (info.GetDamageCustom() == TF_DMG_CUSTOM_BACKSTAB)
-			{
-				// Perceptually, people seem to think the effect is shorter than the stated time, so we cheat by adding a tad more for that
-				m_Shared.AddCond(TF_COND_CRITBOOSTED_ON_KILL, iCritBoost + 1);
 			}
 		}
 

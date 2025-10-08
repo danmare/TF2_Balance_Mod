@@ -2303,7 +2303,7 @@ int CTFPlayerShared::GetDisguiseMaxBuffedHealth( bool bIgnoreAttributes /*= fals
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Runs SERVER SIDE only Condition Think //**//
+// Purpose: Runs SERVER SIDE only Condition Think
 // If a player needs something to be updated no matter what do it here (invul, etc).
 //-----------------------------------------------------------------------------
 void CTFPlayerShared::ConditionGameRulesThink( void )
@@ -2338,22 +2338,6 @@ void CTFPlayerShared::ConditionGameRulesThink( void )
 					else
 					{
 						flReduction += (m_aHealers.Count() * flReduction * 4);
-					}
-				}
-
-				float flReductionAmount = 1.0f; //??//
-				//CALL_ATTRIB_HOOK_FLOAT(flReductionAmount, decrease_debuff_duration);
-				//DevLog("decrease_debuff_duration %.2f\n", flReductionAmount);
-				if (ConditionExpiresFast((ETFCond)i) && flReductionAmount < 1.0f)
-				{
-					flReductionAmount = 2 - flReductionAmount;
-					if (i == TF_COND_URINE)
-					{
-						flReduction += (flReductionAmount * flReduction);
-					}
-					else
-					{
-						flReduction += (flReductionAmount * flReduction * 4);
 					}
 				}
 
@@ -9645,7 +9629,7 @@ int	CTFPlayerShared::GetNumKillsInTime( float flTime )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Handles adding to the spy cloak meter, returns true if the meter was actually changed
+// Purpose: 
 //-----------------------------------------------------------------------------
 bool CTFPlayerShared::AddToSpyCloakMeter( float val, bool bForce )
 {
@@ -9672,16 +9656,6 @@ bool CTFPlayerShared::AddToSpyCloakMeter( float val, bool bForce )
 		else
 		{
 			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pWpn, val, ReducedCloakFromAmmo );
-		}
-
-        float flCloakCap = 1.0f;	//??//
-        CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWpn, flCloakCap, CloakCapFromAmmo);
-		flCloakCap = 100 * flCloakCap;
-
-		if ( flCloakCap < 100 )
-		{
-			float dummyVal = val;
-			val = MIN(dummyVal, flCloakCap);
 		}
 	}
 
@@ -11065,53 +11039,6 @@ float CTFPlayer::TeamFortress_CalculateMaxSpeed( bool bIgnoreSpecialAbility /*= 
 		}
 	}
 	return maxfbspeed;
-}
-
-
-//-----------------------------------------------------------------------------
-// Purpose: Decrease Debuff duration //??//
-//-----------------------------------------------------------------------------
-void CTFPlayerShared::DecreaseDebuffDuration (void)
-{
-	float flReductionAmount = 1.0f;
-	CTFWeaponBase* pActiveWeapon = m_pOuter->GetActiveTFWeapon();
-
-	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(m_pOuter, flReductionAmount, decrease_debuff_duration);
-
-
-#ifdef GAME_DLL
-	if (flReductionAmount >= 1.0f)
-		return;
-
-	else
-	{
-		float flReduction = (gpGlobals->frametime * 0.75f);
-		for (int i = 0; g_aDebuffConditions[i] != TF_COND_LAST; i++)
-		{
-			if (InCond(g_aDebuffConditions[i]))
-			{
-				if (m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime != PERMANENT_CONDITION)
-				{
-					m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime = MAX(m_ConditionData[g_aDebuffConditions[i]].m_flExpireTime - flReduction, 0);
-				}
-				// Burning and Bleeding and extra timers
-				if (g_aDebuffConditions[i] == TF_COND_BURNING)
-				{
-					// Reduce the duration of this burn
-					m_flAfterburnDuration -= flReduction;
-				}
-				else if (g_aDebuffConditions[i] == TF_COND_BLEEDING)
-				{
-					// Reduce the duration of this bleeding 
-					FOR_EACH_VEC(m_PlayerBleeds, i)
-					{
-						m_PlayerBleeds[i].flBleedingRemoveTime -= flReduction;
-					}
-				}
-			}
-		}
-	}
-#endif
 }
 
 void CTFPlayer::TeamFortress_SetSpeed()
@@ -14166,7 +14093,7 @@ void CTFPlayerShared::UpdateCloakMeter( void )
 		}
 
 		// Update Debuffs
-		// Decrease duration if cloaked //**//
+		// Decrease duration if cloaked
 #ifdef GAME_DLL
 		// staging_spy
 		float flReduction = gpGlobals->frametime * 0.75f;
@@ -14765,3 +14692,4 @@ bool CTFPlayer::IsHelpmeButtonPressed() const
 {
 	return m_flHelpmeButtonPressTime != 0.f;
 }
+

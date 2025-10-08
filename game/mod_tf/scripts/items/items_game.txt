@@ -17036,8 +17036,7 @@
 				"single wep deploy time decreased"		"0.4"
 				"switch from wep deploy time decreased"	"0.7"
 				"weapon burn dmg reduced"				"0.34"
-				"damage penalty"						"0.75"
-
+				"airblast cost increased"				"1.25"
 			}
 			"visuals"
 			{
@@ -23531,11 +23530,6 @@
 					"attribute_class"	"kill_eater_score_type"
 					"value"				"9"								
 				}
-				"cloak cap from ammo"
-				{
-					"attribute_class"	"CloakCapFromAmmo"
-					"value"	".35"
-				}
 			}
 			"mouse_pressed_sound"	"ui/item_watch_pickup.wav"
 			"drop_sound"		"ui/item_watch_drop.wav"
@@ -29244,19 +29238,18 @@
 			"used_by_classes"
 			{
 				"sniper"	"1"
-				"scout"		"1"
 			}
 			"attributes"
 			{
-				"max health additive bonus"
+				"afterburn immunity"
 				{
-					"attribute_class"	"add_maxhealth"
-					"value" "25"
-				}	
-				"decrease debuff duration"
+					"attribute_class"	"afterburn_immunity"
+					"value"			"1"
+				}
+				"dmg taken from fire reduced"
 				{
-					"attribute_class"	"decrease_debuff_duration"
-					"value"			"1.5"
+					"attribute_class"	"mult_dmgtaken_from_fire"
+					"value"			"0.5"
 				}
 				"allowed in medieval mode"
 				{
@@ -36511,11 +36504,6 @@
 					"attribute_class"	"rocket_jump_dmg_reduction"
 					"value" "0.75"
 				}
-				"knockback bonus"
-				{
-					"attribute_class"	"mult_knockback"
-					"value" "10000000000.00"
-				}
 			}
 			"visuals"
 			{
@@ -40253,11 +40241,6 @@
 				{
 					"attribute_class"	"crit_boost_on_kill_destroy"
 					"value"	"3"
-				}
-				"sapper kills collect crits"
-				{
-					"attribute_class"	"sapper_kills_collect_crits"
-					"value" "1"
 				}
 				"damage penalty"
 				{
@@ -223760,36 +223743,6 @@
 			"hidden"	"0"
 			"effect_type"	"negative"
 			"armory_desc"	"on_wearer"
-			"stored_as_integer"	"0"
-		}
-		"993"
-		{
-			"name"	"cloak cap from ammo"
-			"attribute_class"	"CloakCapFromAmmo"
-			"description_string"	"#Attrib_CloakCapFromAmmo"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"negative"
-			"stored_as_integer"	"0"
-		}
-		"994"
-		{
-			"name"	"knockback bonus"
-			"attribute_class"	"mult_knockback"
-			"description_string"	"#Attrib_KnockbackDone_Positive"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
-			"stored_as_integer"	"0"
-		}
-		"995"
-		{
-			"name"	"decrease debuff duration"
-			"attribute_class"		"decrease_debuff_duration"
-			"description_string"	"#Attrib_DecreaseDebuffDuration"
-			"description_format"	"value_is_percentage"
-			"hidden"	"0"
-			"effect_type"	"positive"
 			"stored_as_integer"	"0"
 		}
 		
