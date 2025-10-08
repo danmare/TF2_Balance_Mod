@@ -5063,7 +5063,7 @@ void C_TFPlayer::UpdateRecentlyTeleportedEffect( void )
 
 			if ( TFGameRules()->IsMannVsMachineMode() && IsABot() )
 			{
-#if 0 // Nice idea, but it's chewing into our particle budget, and because bots currently spawn in ubered it's nearly invisible.
+#if 0 // Nice idea, but it's chewing into our particle budget, and because bots currently spawn in ubered it's nearly invisible. //**//
 				pszEffectName = "bot_recent_teleport_blue";
 #else
 				pszEffectName = NULL;
