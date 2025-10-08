@@ -497,8 +497,6 @@ public:
 	float	GetSpyCloakMeter() const		{ return m_flCloakMeter; }
 	void	SetSpyCloakMeter( float val ) { m_flCloakMeter = val; }
 
-	void	DecreaseDebuffDuration(void); //??//
-
 	void	UpdateRageBuffsAndRage();
 	bool	IsRageDraining() const			{ return m_bRageDraining; }
 	float	GetRageMeter() const		{ return m_flRageMeter; }
