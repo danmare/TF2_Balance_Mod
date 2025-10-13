@@ -2,7 +2,7 @@
 {
 	"tr_walkway_rc2"
 	{
-		"viewed"		"238"
+		"viewed"		"243"
 	}
 	"ctf_2fort"
 	{
@@ -15,5 +15,9 @@
 	"pl_barnblitz"
 	{
 		"viewed"		"4"
+	}
+	"cp_gorge"
+	{
+		"viewed"		"2"
 	}
 }

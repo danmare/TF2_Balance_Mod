@@ -574,7 +574,7 @@ int CObjectSapper::OnTakeDamage( const CTakeDamageInfo &info )
 			return 0;
 
 		float sapperPenalty = 0.0f; //??//
-		if (pWeapon && sapperPenalty > 0.0f)
+		if (pWeapon && sapperPenalty > 0)
 		{
 			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWeapon, sapperPenalty, dmg_penalty_sapper);
 		}

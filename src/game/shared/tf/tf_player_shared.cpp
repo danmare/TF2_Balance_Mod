@@ -9655,24 +9655,23 @@ bool CTFPlayerShared::AddToSpyCloakMeter( float val, bool bForce )
 		}
 		else
 		{
-			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pWpn, val, ReducedCloakFromAmmo );
-			
-			// Dead Ringer cloak cap
-			float flCloakCap = 1.0f; //OO//
-			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER(pWpn, flCloakCap, CloakCapFromAmmo); //OO//
-			if (flCloakCap < 1.0f)  //OO//
-			{
-				// Need to figure out math so that it will display correctly on the HUD.
-				// Dead Ringer's 35% cloak cap is currently hard coded into tf_english.txt
-				// If we want to change it, we need to change the hud code as well.
-				val = MIN(val, flCloakCap);
-			}
+			CALL_ATTRIB_HOOK_INT_ON_OTHER(pWpn, val, ReducedCloakFromAmmo);
 		}
 	}
 
 	bool bResult = ( val > 0 && m_flCloakMeter < 100.0f );
 
-	m_flCloakMeter = clamp( m_flCloakMeter + val, 0.0f, 100.0f );
+	// Dead Ringer cloak cap
+	int iCloakCap = 0; //OO//
+	CALL_ATTRIB_HOOK_INT_ON_OTHER(pWpn, iCloakCap, CloakCapFromAmmo); //OO//
+	if (iCloakCap)  //OO//
+	{
+		m_flCloakMeter = clamp(m_flCloakMeter + 35.0f, 0.0f, 100.0f);
+	}
+	else
+	{
+		m_flCloakMeter = clamp(m_flCloakMeter + val, 0.0f, 100.0f);
+	}
 
 	return bResult;
 }
