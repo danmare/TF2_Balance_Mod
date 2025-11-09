@@ -23450,10 +23450,10 @@
 					"attribute_class"	"allowed_in_medieval_mode"
 					"value"	"1"
 				}
-				"patient overheal penalty"
+				"max health additive penalty"
 				{
-					"attribute_class"	"mult_patient_overheal_penalty"
-					"value" "0.0"
+					"attribute_class"	"add_maxhealth"
+					"value" "-25"
 				}
 			}
 			"mouse_pressed_sound"	"ui/item_wood_pole_pickup.wav"
@@ -44769,6 +44769,11 @@
 				{
 					"attribute_class"	"allowed_in_medieval_mode"
 					"value"	"1"
+				}
+				"maxammo primary increased"
+				{
+					"attribute_class"	"mult_maxammo_primary"
+					"value" "1.5"
 				}
 			}
 			"mouse_pressed_sound"	"ui/item_pack_pickup.wav"
